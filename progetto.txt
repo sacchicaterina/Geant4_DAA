@@ -5,7 +5,7 @@ Piano operativo:
 LAVORARE NEL FILE DetectorConstruction.cc per geometria. 
 
 2: Sorgente: configurare GPS per sparare ioni ¹²C a 120 MeV/u.
- TROVO TUTTO IN carbon.mac
+Creo una nuova macro per il carbonio:carbon.mac la creo seguendo la costruzione di gamma.mac per esempio
 
 
 
