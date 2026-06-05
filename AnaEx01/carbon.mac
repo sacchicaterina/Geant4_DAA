@@ -1,0 +1,13 @@
+
+/run/initialize
+
+/gps/particle ion
+/gps/ion 6 12 0
+/gps/energy 1440 MeV
+
+/gps/pos/type Point
+/gps/pos/centre 0. 0. -160. mm
+
+/gps/direction 0 0 1
+
+/run/beamOn 1000

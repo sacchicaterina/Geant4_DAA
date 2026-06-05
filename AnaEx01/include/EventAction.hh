@@ -29,7 +29,7 @@
 //
 // $Id: EventAction.hh 98241 2016-07-04 16:56:59Z gcosmo $
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+#include <array>
 
 class RunAction;
 class HistoManager;
@@ -48,27 +49,40 @@ class HistoManager;
 class EventAction : public G4UserEventAction
 {
 public:
-  EventAction(RunAction*, HistoManager*);
+  EventAction(RunAction *, HistoManager *);
   virtual ~EventAction() override;
 
-  virtual void  BeginOfEventAction(const G4Event*) override;
-  virtual void    EndOfEventAction(const G4Event*) override;
-    
-  void AddAbs(G4double de, G4double dl) {fEnergyAbs += de; fTrackLAbs += dl;};
-  void AddGap(G4double de, G4double dl) {fEnergyGap += de; fTrackLGap += dl;};
-    
+  virtual void BeginOfEventAction(const G4Event *) override;
+  virtual void EndOfEventAction(const G4Event *) override;
+
+  void AddAbs(G4double de, G4double dl)
+  {
+    fEnergyAbs += de;
+    fTrackLAbs += dl;
+  };
+  void AddGap(G4double de, G4double dl)
+  {
+    fEnergyGap += de;
+    fTrackLGap += dl;
+  };
+  // now we add the method to fill the histogram of energy deposition in each slice
+  void AddEdepSlice(G4int sliceID, G4double de)
+  {
+    if (sliceID >= 0 && sliceID < 300)
+      fEdepSlice[sliceID] += de;
+  };
+
 private:
-   RunAction*    fRunAction;
-   HistoManager* fHistoManager;
-      
-   G4double  fEnergyAbs, fEnergyGap;
-   G4double  fTrackLAbs, fTrackLGap;
-                     
-   G4int     fPrintModulo;                             
+  RunAction *fRunAction;
+  HistoManager *fHistoManager;
+
+  G4double fEnergyAbs, fEnergyGap;
+  G4double fTrackLAbs, fTrackLGap;
+  G4double fEdepSlice[300]; // energia depositata per slice
+
+  G4int fPrintModulo;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

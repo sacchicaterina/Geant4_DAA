@@ -29,7 +29,7 @@
 //
 // $Id: SteppingAction.cc 98241 2016-07-04 16:56:59Z gcosmo $
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,34 +42,46 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det,
-                                         EventAction* evt)
-: G4UserSteppingAction(), 
-  fDetector(det), fEventAction(evt)                                         
-{ }
+SteppingAction::SteppingAction(DetectorConstruction *det,
+                               EventAction *evt)
+    : G4UserSteppingAction(),
+      fDetector(det), fEventAction(evt)
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::~SteppingAction()
-{ }
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction(const G4Step* aStep)
+void SteppingAction::UserSteppingAction(const G4Step *aStep)
 {
   // get volume of the current step
-  G4VPhysicalVolume* volume 
-  = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
-  
+  G4VPhysicalVolume *volume = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+
   // collect energy and track length step by step
   G4double edep = aStep->GetTotalEnergyDeposit();
-  
+
   G4double stepl = 0.;
   if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
     stepl = aStep->GetStepLength();
-      
-  if (volume == fDetector->GetAbsorber()) fEventAction->AddAbs(edep,stepl);
-  if (volume == fDetector->GetGap())      fEventAction->AddGap(edep,stepl);
+
+  if (volume == fDetector->GetAbsorber())
+  {
+    fEventAction->AddAbs(edep, stepl);
+    // copy number della slice = indice di profondità
+    G4int copyNo = aStep->GetPreStepPoint()
+                       ->GetTouchableHandle()
+                       ->GetReplicaNumber(1);
+    fEventAction->AddEdepSlice(copyNo, edep);
+  }
+  if (volume == fDetector->GetGap())
+    fEventAction->AddGap(edep, stepl);
+  // if (volume == fDetector->GetAbsorber()) fEventAction->AddAbs(edep,stepl);
+  // if (volume == fDetector->GetGap())      fEventAction->AddGap(edep,stepl);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -29,7 +29,7 @@
 //
 // $Id: EventAction.cc 98241 2016-07-04 16:56:59Z gcosmo $
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@ EventAction::EventAction(RunAction* run, HistoManager* histo)
  fRunAction(run),fHistoManager(histo),
  fEnergyAbs(0.), fEnergyGap(0.),
  fTrackLAbs(0.), fTrackLGap(0.),
- fPrintModulo(0)                             
+ fPrintModulo(0)
 {
  fPrintModulo = 100; }
 
@@ -60,32 +60,36 @@ EventAction::~EventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event* evt)
-{  
+{
   // G4int evtNb = evt->GetEventID();
- 
+
  // initialisation per event
  fEnergyAbs = fEnergyGap = 0.;
  fTrackLAbs = fTrackLGap = 0.;
+ for (G4int i = 0; i < 300; i++) fEdepSlice[i] = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  //accumulates statistic
-  //
   fRunAction->FillPerEvent(fEnergyAbs, fEnergyGap, fTrackLAbs, fTrackLGap);
-  
-  //fill histograms
-  //
+
   fHistoManager->FillHisto(0, fEnergyAbs);
   fHistoManager->FillHisto(1, fEnergyGap);
   fHistoManager->FillHisto(2, fTrackLAbs);
   fHistoManager->FillHisto(3, fTrackLGap);
-  
-  //fill ntuple
-  //
+
   fHistoManager->FillNtuple(fEnergyAbs, fEnergyGap, fTrackLAbs, fTrackLGap);
-}  
+
+  for (G4int i = 0; i < 300; i++)
+  {
+    if (fEdepSlice[i] > 0.)
+    {
+      fHistoManager->FillHisto(4, i + 0.5, fEdepSlice[i]);
+    }
+  }
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
