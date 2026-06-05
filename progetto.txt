@@ -1,0 +1,15 @@
+Piano operativo:
+
+
+1. Geometria: sostituire il calorimetro a strati con un volume di acqua unico, suddiviso in slice sottili lungo z (la direzione del fascio) per campionare il deposito di energia in funzione della profondità.
+LAVORARE NEL FILE DetectorConstruction.cc per geometria. 
+
+2: Sorgente: configurare GPS per sparare ioni ¹²C a 120 MeV/u.
+ TROVO TUTTO IN carbon.mac
+
+
+
+Scoring: accumulare l'energia depositata per slice → profilo Bragg.
+Physics list: confrontare QGSP_BIC_EMZ, FTFP_BERT, QGSP_BIC_HP, QGSP_BIC, ecc.
+Analisi: normalizzare per volume e numero di eventi, plottare.
+
