@@ -1,0 +1,109 @@
+# carbon12.mac
+#
+# Batch macro per la simulazione.
+#
+# Goal: Simulare l'interazione di ioni di carbonio 12 con energia 120Mev/u in un fantoccio di acqua di 30cm e ricostruire bragg peak
+#   Simulate the interaction of carbon-12 ions with kinetic energy
+
+# Output:
+#   carbon12_QGSP_BIC_EMZ.csv
+# ---------------------------------------------------------------------
+# Geometry: 30 cm water phantom
+# ---------------------------------------------------------------------
+#Riusiamo la geometria del calorimetro AnaEx01, ma usiamo solo acqua e cancelliamo il gap
+
+/N03/det/setAbsMat G4_WATER
+/N03/det/setGapMat G4_WATER
+/N03/det/setAbsThick 1 mm
+/N03/det/setGapThick 0 mm
+/N03/det/setNbOfLayers 300
+
+
+# ---------------------------------------------------------------------
+# Initialize geometry and physics
+# ---------------------------------------------------------------------
+#Dopo aver descritto la geometria e prima della fisica facciamo:
+
+/run/initialize
+
+
+# ---------------------------------------------------------------------
+# Primary beam: carbon-12 at 120 MeV/u
+# ---------------------------------------------------------------------
+# La GPS la usiamo per caratterizzare il nostro fascio di ioni di carbonio monoenergetico
+# Definzione di IOne in geant:
+#   /gps/ion Z A Q E
+#
+# Per il  carbon-12:
+#   Z = 6
+#   A = 12
+#   Q = 0
+#
+# Beam energy:
+#   120 MeV/u * 12 nucleons = 1440 MeV total kinetic energy.
+#
+# Beam position:
+#   x = -16 cm, lo mettiamo a -15 invece di -15 cosi siamo sicure che sta fuori dal fantoccio
+#
+# Beam direction:
+#   +x
+
+/gps/particle ion
+/gps/ion 6 12 0
+/gps/ene/type Mono
+/gps/ene/mono 1440 MeV
+/gps/pos/type Point
+/gps/pos/centre -16 0 0 cm
+/gps/direction 1 0 0
+
+
+# ---------------------------------------------------------------------
+# Scoring mesh for Bragg peak reconstruction
+# ---------------------------------------------------------------------
+
+# Una box mesh è usata per tenere traccia dell'energia depositata come funzione della profondità
+# Important convention:
+
+#   /score/mesh/boxSize gives the half-size of the mesh.
+#
+# ALLORA:
+#   boxSize 15 5 5 cm
+#
+# corrisponde ad una mesh completa di dimensione:
+#   30 cm su x
+#   10 cm  su y
+#   10 cm  su z
+#
+# La mesh è divisa come :
+#   300 bins su x
+#   1 bin su y
+#   1 bin su z
+#
+# allora il bin size è:
+#   30 cm / 300 = 1 mm
+#
+
+
+/score/create/boxMesh BraggMesh
+/score/mesh/boxSize 15 5 5 cm
+/score/mesh/nBin 300 1 1
+/score/quantity/energyDeposit edep
+/score/close
+
+
+# ---------------------------------------------------------------------
+# Run
+# ---------------------------------------------------------------------
+# numero di primari, ne servono almeno 10^6 PER BUONA STATISTICA
+
+
+/run/beamOn 1000
+
+
+# ---------------------------------------------------------------------
+# Save scored energy deposition
+# ---------------------------------------------------------------------
+# The output file contains the deposited energy per scoring bin.
+# Il file di output contiene l'energia depositata per bin, va poi elaborato con lo script python dentro build.
+
+/score/dumpQuantityToFile BraggMesh edep carbon12_QGSP_BERT.csv

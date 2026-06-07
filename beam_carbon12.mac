@@ -1,0 +1,23 @@
+# =====================================================================
+# beam_carbon12.mac
+#
+# Macro interattiva utilizzata esclusivamente per definire il fascio
+# di 12C nella finestra grafica di Geant4.
+# ---------------------------------------------------------------------
+# Fascio primario: carbonio-12 a 120 MeV/u
+# ---------------------------------------------------------------------
+#
+# Energia cinetica totale:
+#
+#   120 MeV/u × 12 = 1440 MeV
+#
+# Il fascio parte da x = -16 cm e si propaga lungo +x.
+#
+
+/gps/particle ion
+/gps/ion 6 12 0
+/gps/ene/type Mono
+/gps/ene/mono 1440 MeV
+/gps/pos/type Point
+/gps/pos/centre -16 0 0 cm
+/gps/direction 1 0 0
