@@ -1,0 +1,21 @@
+# Configura il phantom come un unico blocco di acqua omogeneo
+/N03/det/setAbsMat G4_WATER
+/N03/det/setAbsThick 1 mm
+/N03/det/setGapMat G4_WATER      # Sostituisce l'Argon con l'Acqua
+/N03/det/setGapThick 0           # Riduce il gap a un valore infinitesimo
+/N03/det/setNbOfLayers 200       # Imposta 200 strati per ottenere un fantoccio di 20 cm
+/run/initialize
+/gps/particle ion
+/gps/ion 6 12 0
+/gps/ene/type Mono
+/gps/ene/mono 3000 MeV
+/gps/pos/type Point
+/gps/pos/centre -10 0 0 cm
+/gps/direction 1 0 0
+/score/create/boxMesh BraggMesh
+/score/mesh/boxSize 10 10 10 cm
+/score/mesh/nBin 400 1 1
+/score/quantity/energyDeposit edep
+/score/close
+/run/beamOn 1000000
+/score/dumpQuantityToFile BraggMesh edep carbon_QGSP_BIC.csv
