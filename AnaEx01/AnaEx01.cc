@@ -54,7 +54,7 @@
 int main(int argc, char **argv)
 {
   //G4String physListName;
-  G4String physListName = "QGSP_BIC_EMZ";
+  G4String physListName = "FTFP_BERT_EMZ";
 
   // Detect interactive mode (if no arguments) and define UI session
   //
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
   // Construct the default run manager
   //
   auto *runManager = G4RunManagerFactory::CreateRunManager();
-  G4int nThreads = 1;
+  G4int nThreads = 7;
   runManager->SetNumberOfThreads(nThreads);
 
   // Physics list factory
