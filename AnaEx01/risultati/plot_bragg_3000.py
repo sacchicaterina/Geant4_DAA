@@ -146,11 +146,11 @@ for file_short_name, config in files_config.items():
     if "noInelastic" in file_short_name:
         ax3.set_title("3. Dettaglio: Caduta post-picco (No Frammentazione)", fontsize=11, style='italic', fontweight='bold')
         ax3.set_xlim(peak_depth, peak_depth + 5.0)
-        ax3.set_ylim(0.5, 3.5)
+        ax3.set_ylim(-0.05, 3.5)
     else:
         ax3.set_title("3. Dettaglio: Coda di Frammentazione Nucleare", fontsize=11, style='italic', fontweight='bold')
         ax3.set_xlim(peak_depth, peak_depth + 5.0)
-        ax3.set_ylim(0.5, 3.5)
+        ax3.set_ylim(-0.05, 3.5)
         
     # Salvataggio simmetrico
     output_png = os.path.join(script_dir, config["filename"])
