@@ -2,7 +2,7 @@
 /N03/det/setAbsMat G4_WATER
 /N03/det/setAbsThick 1 mm
 /N03/det/setGapMat G4_WATER         # Sostituisce l'Argon con l'Acqua
-/N03/det/setGapThick 0 mm           # Riduce il gap a un valore infinitesimo
+/N03/det/setGapThick 0 mm           # Annulla il gap
 /N03/det/setNbOfLayers 300          # Imposta 200 strati per ottenere un fantoccio di 20 cm
 /run/initialize
 /gps/particle ion
@@ -18,4 +18,4 @@
 /score/quantity/energyDeposit edep
 /score/close
 /run/beamOn 1000000
-/score/dumpQuantityToFile BraggMesh edep carbon_QGSP_BIC_EMZ.csv
+/score/dumpQuantityToFile BraggMesh edep carbon_QGSP_BERT.csv
